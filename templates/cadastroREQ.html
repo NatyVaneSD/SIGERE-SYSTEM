@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Requisições</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="top-bar">
+        <span>Sistema de Cadastro</span> |
+        <a href="/">Início</a> |
+        <a href="/buscar">BUSCAR REQUISIÇÃO</a> |
+        <a href="/gerencia">GERÊNCIA</a>
+    </div>
+
+    <div class="formCadastro">
+        <h2>Cadastro de Requisição</h2>
+        <form action="/cadastrar" method="POST">
+            <div class="form-group double-row">
+                <div class="label-inline">
+                <label>Tipo de Documento:</label>
+                <select name="tipo_documento" class="input-pequeno" required>
+                    <option value="AUTO">AUTO</option>
+                    <option value="BOP">BOP</option>
+                    <option value="FLAG">FLAG</option>
+                    <option value="IPL">IPL</option>
+                    <option value="OFICIO">OFÍCIO</option>
+                    <option value="MEMO">MEMO</option>
+                    <option value="PROC">PROC</option>
+                    <option value="TOMBO">TOMBO</option>
+                </select>
+            </div>
+                <div class="label-inline">
+                    <label for="numero_documento">Nº do Documento:</label>
+                    <input type="text" id="numero_documento" name="numero_documento" class="input-medio" required>
+                </div>
+            </div>
+    
+            <div class="form-group double-row">
+                <div class="label-inline">
+                    <label for="numero_requisicao">Nº da Requisição:</label>
+                    <input type="text" id="numero_requisicao" name="numero_requisicao" class="input-medio" required>
+                </div>
+                <div class="label-inline">
+                    <label for="data_requisicao">Data da Requisição:</label>
+                    <input type="date" name="data_requisicao" id="data_requisicao" class="input-pequeno">
+                </div>
+            </div>
+    
+            <div class="form-group double-row">
+                <div class="label-inline">
+                    <label for="unidade_solicitante">Unidade Solicitante:</label>
+                    <input type="text" name="unidade_solicitante"id="unidade_solicitante" class="input-medio">
+                </div>
+                <div class="label-inline">
+                    <label for="solicitante">Solicitante:</label>
+                    <input type="text" name="solicitante" id="solicitante" class="input-medio">
+                </div>
+            </div>
+    
+            <div class="form-group double-row">
+                <div class="label-inline">
+                    <label>Tipo de Equipamento:</labe>
+                    <select name="tipo_equipamento" class="input-medio" id="tipo_equipamento"required>
+                        <option value="SMARTPHONE">SMARTPHONE</option>
+                        <option value="TABLET">TABLET</option>
+                        <option value="NOTEBOOK">NOTEBOOK</option>
+                        <option value="CPU">CPU</option>
+                        <option value="HD">HD</option>
+                        <option value="SSD">SSD</option>
+                        <option value="PENDRIVE">PENDRIVE</option>
+                        <option value="OUTROS">OUTROS</option>
+                    </select>
+                </div>
+
+                <div class="label-inline" id="campo-outros-equipamento">
+                    <label for="outros_equipamentos">Outros:</label>
+                    <input type="text" name="outros_equipamentos"id="outros_equipamentos" class="input-medio">
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="quantidade_equipamentos">Quantidade: (und)</label>
+                <input type="text" name="quantidade_equipamentos"id="quantidade_equipamentos" class="input-pequeno">
+            </div>
+    
+            <div class="form-group double-row">
+                <div class="label-inline">
+                    <label>Tipo de Exame:</label>
+                <select name="tipo_exame" class="input-medio" id="tipo_exame"required>
+                    <option value="EXTRAÇÃO DE DADOS EM APARELHO CELULAR">EXTRAÇÃO DE DADOS EM APARELHO CELULAR</option>
+                    <option value="ANÁLISE DE CONTEÚDO">ANÁLISE DE CONTEÚDO</option>
+                    <option value="EXTRAÇÃO DE DADOS">EXTRAÇÃO DE DADOS</option>
+                    <option value="OUTROS">OUTROS</option>
+                </select>
+                </div>
+                <div class="label-inline" id="campo-outros-exame">
+                    <label for="outros_exames">Outros:</label>
+                    <input type="text" name="outros_exames"id="outros_exames" class="input-medio">
+                </div>
+                <div class="label-inline">
+                    <label for="data_recebimento">Data de Recebimento:</label>
+                    <input type="date" name="data_recebimento" id="data_recebimento" class="input-pequeno">
+                </div>
+            </div>
+
+            <div class="form-group double-row">
+                <div class="label-inline">
+                    <label for="numero_protocolo">Nº do Protocolo:</label>
+                    <input type="text" name="numero_protocolo" id="numero_protocolo" class="input-medio">
+                </div>
+                <div class="label-inline">
+                    <label for="numero_caso">Nº do Caso:</label>
+                    <input type="text" name="numero_caso"id="numero_caso" class="input-pequeno">
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="objetivo_pericia">Objetivo da Perícia:</label>
+                <input type="text" name="objetivo_pericia" id="objetivo_pericia" class="input-grande">
+            </div>
+    
+            <div class="form-group double-row">
+                <div class="label-inline">
+                    <label>Nível de Prioridade:</label>
+                    <select name="nivel_prioridade" class="input-pequeno"required>
+                        <option value="P1">P1</option>
+                        <option value="P2">P2</option>
+                        <option value="P3">P3</option>
+                        <option value="P4">P4</option>
+                    </select>
+                </div>
+                <div class="label-inline">
+                    <label>Local de Armazenamento:</label>
+                    <select name="local_armazenamento" class="input-medio"required>
+                        <option value="DEPOSITO 01">DEPOSITO 01</option>
+                        <option value="DEPOSITO 02">DEPOSITO 02</option>
+                        <option value="DEPOSITO 03">DEPOSITO 03</option>
+                    </select>
+                </div>
+                <div class="label-inline">
+                    <label>Prateleira:</label>
+                    <select name="prateleira" class="input-pequeno" required>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="A3">A3</option>
+                        <option value="A4">A4</option>
+                        <option value="A5">A5</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="B3">B3</option>
+                        <option value="B4">B4</option>
+                        <option value="B5">B5</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                        <option value="C3">C3</option>
+                        <option value="C4">C4</option>
+                        <option value="C5">C5</option>
+                        <option value="D1">D1</option>
+                        <option value="D2">D2</option>
+                        <option value="D3">D3</option>
+                        <option value="D4">D4</option>
+                        <option value="D5">D5</option>
+                        <option value="E1">E1</option>
+                        <option value="E2">E2</option>
+                        <option value="E3">E3</option>
+                        <option value="E4">E4</option>
+                        <option value="E5">E5</option>
+                    </select>
+                </div>
+                <div class="label-inline">
+                    <label>status:</label>
+                    <select name="status" class="input-pequeno"required>
+                        <option value="EM ESPERA">EM ESPERA</option>
+                        <option value="EM ANDAMENTO">EM ANDAMENTO</option>
+                        <option value="FINALIZADO">FINALIZADO</option>
+                        <option value="CANCELADO">CANCELADO</option>
+                    </select>
+                </div>
+            </div>
+            </div>
+            <div class="botao">
+                <button type="submit">Cadastrar</button>   
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectEquipamento = document.getElementById("tipo_equipamento");
+        const campoOutrosEquipamento = document.getElementById("campo-outros-equipamento");
+
+        const selectExame = document.getElementById("tipo_exame");
+        const campoOutrosExame = document.getElementById("campo-outros-exame");
+
+        // Esconder os campos inicialmente
+        campoOutrosEquipamento.style.display = "none";
+        campoOutrosExame.style.display = "none";
+
+        selectEquipamento.addEventListener("change", function () {
+            if (selectEquipamento.value === "OUTROS") {
+                campoOutrosEquipamento.style.display = "block";
+            } else {
+                campoOutrosEquipamento.style.display = "none";
+            }
+        });
+
+        selectExame.addEventListener("change", function () {
+            if (selectExame.value === "OUTROS") {
+                campoOutrosExame.style.display = "block";
+            } else {
+                campoOutrosExame.style.display = "none";
+            }
+        });
+    });
+</script>
+</html>

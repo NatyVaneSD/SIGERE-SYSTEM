@@ -1,0 +1,152 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    text-align: center;
+}
+
+.top-bar {
+    background-color: #247dd6;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.formCadastro {
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 20px auto;
+    max-height: 440px;
+    overflow-y: auto;
+}
+
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.label-inline {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Tamanhos dos inputs */
+.input-pequeno {
+    width: 120px;
+}
+
+.input-medio {
+    width: 250px;
+}
+
+.input-grande {
+    flex: 1;
+    height: 20px;
+}
+.botao{
+    justify-items: center;
+    margin-bottom: 10px;
+    margin-top: 0;
+
+}
+
+button {
+    display: flex;
+    width: auto; 
+    background-color: #2980b9;
+    color: white;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease; 
+    text-align: center;  
+}
+
+
+button:hover {
+    background-color: #1f6690;
+  
+}
+/* Estilos para os filtros de busca */
+.filtros-busca {
+    margin-bottom: 20px;
+}
+
+.filtros-busca label {
+    margin-right: 10px;
+}
+
+.filtros-busca input,
+.filtros-busca select {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+/* Estilos para a tabela de resultados */
+.tabela-resultados {
+    overflow-x: auto;
+}
+
+#tabela-requisicoes {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#tabela-requisicoes th,
+#tabela-requisicoes td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#tabela-requisicoes th {
+    background-color: #247dd6;
+    color: white;
+}
+
+#tabela-requisicoes tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#tabela-requisicoes tr:hover {
+    background-color: #ddd;
+}
+
+/* Estilos para os botões de ação */
+#tabela-requisicoes button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    background-color: #247dd6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#tabela-requisicoes button:hover {
+    background-color: #1f6690;
+}
+
+@media (max-width: 768px) {
+    .form-group {
+        flex-direction: column;
+    }
+    
+    .label-inline {
+        width: 100%;
+    }
+}
