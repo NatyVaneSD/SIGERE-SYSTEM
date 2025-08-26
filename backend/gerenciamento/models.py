@@ -1,131 +1,183 @@
+# gerenciamento/models.py
+
 from django.db import models
 
-perito_opicoes = {
-    "Marcelo": "Marcelo Maués",
-    "Fernando":"Luiz Fernando",
-    "Verônica": "Verônica",
-    "Natanael": "Natanael",
-    "Samira": "Samira Luz",
-    }
+# Listas de escolhas (choices) para os campos
+# Definidas como tuplas, não dicionários, e fora das classes para melhor reuso
+PERITO_CHOICES = [
+    ("Marcelo", "Marcelo Maués"),
+    ("Fernando", "Luiz Fernando"),
+    ("Verônica", "Verônica"),
+    ("Natanael", "Natanael"),
+    ("Samira", "Samira Luz"),
+]
 
-class Requisicao(models.Model):
-    id = primary_Key=True
-    tipo_documento_opicoes = {
-        "FLAG": "FLAG",
-        "IPL": "IPL",
-        "BOP": "BOP",
-        "OF": "OF",
-        "TCO": "TCO",
-        "MEMO": "MEMO",        
-    }
-    tipo_documeto = models.CharField(
-        max_length=4,
-        choices = tipo_documento_opicoes,
-    )
-    numero_caso = models.CharField(max_length=50, unique= True)
-    data_requisicao = models.DateField
-    data_recebimento = models.DateField
-    objetivo_pericia =models.TextField(max_length=225)
-    
-    status_documento_opicoes = {
-        "ESPERA": "Em Espera",
-        "PROCESSAMENTO": "Em Processamento",
-        "ENTREGUE": "Entregue",
-        "TRANSFERIDO": "Transferido",
-        "DEVOLVIDO": "Devolvido",
-        "CANCELADO": "Cancelado",    
-    }
-    status_requisicao = models.CharField(choices=status_documento_opicoes)
-    
-    peso_documento_opicoes = {
-        "P1": "PESO 01",
-        "P2": "PESO 02",
-        "P3": "PESO 03",
-        "P4": "PESO 04", 
-    }
-    peso_requisicao = models.CharField(choices=peso_documento_opicoes)
-    pae_requisicao = models.CharField(max_length=25, unique=True)
-    
-    
-class Solicitante(models.Model):
-    nome_solicitante = models.CharField(max_length=255)
-    
-    def __str__(self):
-        return self.nome_Solicitante
+TIPO_DOCUMENTO_CHOICES = [
+    ("FLAG", "FLAG"),
+    ("IPL", "IPL"),
+    ("BOP", "BOP"),
+    ("OF", "OF"),
+    ("TCO", "TCO"),
+    ("MEMO", "MEMO"),
+]
 
+STATUS_CHOICES = [
+    ("ESPERA", "Em Espera"),
+    ("PROCESSAMENTO", "Em Processamento"),
+    ("ENTREGUE", "Entregue"),
+    ("TRANSFERIDO", "Transferido"),
+    ("DEVOLVIDO", "Devolvido"),
+    ("CANCELADO", "Cancelado"),
+]
+
+PESO_CHOICES = [
+    ("P1", "PESO 01"),
+    ("P2", "PESO 02"),
+    ("P3", "PESO 03"),
+    ("P4", "PESO 04"),
+]
+
+EQUIPAMENTO_CHOICES = [
+    ("SMARTPHONE", "SMARTPHONE"),
+    ("NOTEBOOK", "NOTEBOOK"),
+    ("PENDRIVE", "PENDRIVE"),
+    ("HD", "HD"),
+    ("SSD", "SSD"),
+    ("CPU", "CPU"),
+    ("CARTAO MICROSD", "CARTÃO MICROSD"),
+    ("OUTROS", "Outros"),
+]
+
+DEPOSITO_CHOICES = [
+    ("D1", "Deposito 01"),
+    ("D2", "Deposito 02"),
+    ("D3", "Deposito 03"),
+]
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+# Classes corrigidas (modelos)
 
 class UnidadeSolicitante(models.Model):
+    # O Django já cria o campo 'id' automaticamente
     nome_UnidadeSolicitante = models.CharField(max_length=255)
 
     def __str__(self):
         return self.nome_UnidadeSolicitante
-    
-class TipoExame(models.Models):
-    nome_exame =models.CharField(max_length=225)
+
+class Solicitante(models.Model):
+    nome_solicitante = models.CharField(max_length=255)
+    # Adicionando a chave estrangeira para UnidadeSolicitante
+    unidade_solicitante = models.ForeignKey(UnidadeSolicitante, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nome_solicitante
+
+class TipoExame(models.Model):
+    nome_exame = models.CharField(max_length=225)
     
     def __str__(self):
         return self.nome_exame
+
+class Perito(models.Model):
+    # Criando um modelo de Perito para ter uma tabela própria
+    nome = models.CharField(max_length=255)
+    # Relação com a tabela de Laudo e Protocolo será feita usando ForeingKey
     
-class Protocolo (models.Models):
+    def __str__(self):
+        return self.nome
+    
+class Requisicao(models.Model):
+    # O id é gerado automaticamente
+    tipo_documento = models.CharField(max_length=4, choices=TIPO_DOCUMENTO_CHOICES)
+    # numero_caso não precisa ser max_length=50, 9 é o suficiente
+    numero_caso = models.CharField(max_length=9, unique=True)
+    # Adicionando parênteses para os campos de data
+    data_requisicao = models.DateField()
+    data_recebimento = models.DateField()
+    # TextField não precisa de max_length
+    objetivo_pericia = models.TextField()
+    status_requisicao = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    peso_requisicao = models.CharField(max_length=2, choices=PESO_CHOICES)
+    # PAE não precisa ser unique, pois pode haver requisições sem PAE
+    pae_requisicao = models.CharField(max_length=25, blank=True, null=True)
+
+    # Adicionando as chaves estrangeiras para Solicitante e TipoExame
+    solicitante = models.ForeignKey(Solicitante, on_delete=models.SET_NULL, null=True)
+    tipo_exame = models.ForeignKey(TipoExame, on_delete=models.SET_NULL, null=True)
+    
+    def __str__(self):
+        return f"Req. {self.numero_caso} - Status: {self.status_requisicao}"
+
+
+class Protocolo(models.Model):
     numero_protocolo = models.CharField(max_length=50, unique=True)
-    data_entrega_perito = models.DateField
-    perito= models.CharField(choices=perito_opicoes)
+    data_entrega_perito = models.DateField()  # Adicionando parênteses
+    
+    # Perito deve ser uma chave estrangeira, não um campo de texto com escolhas
+    perito = models.ForeignKey(Perito, on_delete=models.SET_NULL, null=True)
+    
+    # Chave estrangeira para a Requisição
+    requisicao = models.ForeignKey(Requisicao, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.numero_protocolo, self.perito, self.data_entrega_perito
-    
-class Equipamento(models.Models):
-    quantidade_equipamento = models.IntegerField(max_length=50)
-    
-    def __str__(self):
-        return self.quantidade_equipamento
+        return self.numero_protocolo
 
-class Tipo_Equipamento(models.Models):
-    tipo_opicoes = {
-    "SMARTPHONE": "SMARTPHONE",
-    "NOTEBOOK": "NOTEBOOK",
-    "PENDRIVE": "PENDRIVE",
-    "HD": "HD",
-    "SSD": "SSD",
-    "CPU": "CPU",
-    "CARTÃO MICROSD": "CARTÃO MICROSD",
-    }
-    tipo= models.CharField(choices=tipo_opicoes)
-    outros_tipo = models.CharField(max_length=50)
+
+class Equipamento(models.Model):
+    # Chave estrangeira para o Tipo_Equipamento
+    tipo_equipamento = models.ForeignKey('TipoEquipamento', on_delete=models.CASCADE)
+    # Chave estrangeira para o Armazenamento
+    local_armazenamento = models.ForeignKey('Armazenamento', on_delete=models.SET_NULL, null=True)
     
+    # Ligação N:M com Laudo e N:1 com Protocolo
+    protocolo = models.ForeignKey(Protocolo, on_delete=models.CASCADE)
+
     def __str__(self):
-        return self.tipo, self.outros_tipo
-    
-class Armazenamento(models.Models):
-    deposito_opicoes = {
-    "Deposito 01": "D1",
-    "Deposito 02": "D2",
-    "Deposito 03": "D3",
-    }
-    deposito= models.CharField(choices=deposito_opicoes)
+        return f"Equipamento {self.pk}" # Retornando o PK para identificação única
+
+class TipoEquipamento(models.Model):
+    # A classe se chamava Tipo_Equipamento
+    tipo = models.CharField(max_length=50, choices=EQUIPAMENTO_CHOICES)
+    # other_type pode ser opcional
+    outros_tipo = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+         # Retorna o valor do campo 'outros_tipo' se 'tipo' for "OUTROS", caso contrário, retorna o valor de 'tipo'
+        return self.get_tipo_display() if self.tipo != "OUTROS" else self.outros_tipo
+
+
+class Armazenamento(models.Model):
+    deposito = models.CharField(max_length=50, choices=DEPOSITO_CHOICES)
     prateleira = models.CharField(max_length=50)
-    def __str__(self):
-        return self.deposito, self.prateleira
 
-class Laudo(models.Models):
-    numero_laudo = models.CharField(max_length=100)    
-    data_entrega_expedicao= models.DateField()
-    data_entrega_custodia= models.DateField()
+    def __str__(self):
+        return f"{self.deposito} - {self.prateleira}"
+
+class Laudo(models.Model):
+    numero_laudo = models.CharField(max_length=100, unique=True)
+    data_entrega_expedicao = models.DateField()
+    data_entrega_custodia = models.DateField()
     anexo_digital = models.BooleanField(default=True)
-    perito1 = models.CharField(choices=perito_opicoes)
-    perito2 =models.BooleanField(default=False)
+    
+    # Laudo pode ter um ou mais peritos, então a melhor forma é usar ManyToManyField
+    peritos = models.ManyToManyField(Perito)
+    
+    # Laudo se liga a um ou mais equipamentos
+    equipamentos = models.ManyToManyField(Equipamento)
+    
+    # Laudo se liga a um protocolo
+    protocolo = models.ForeignKey(Protocolo, on_delete=models.SET_NULL, null=True)
+
     def __str__(self):
-        return self.numero_laudo, self.data_entrega_expedicao, self.data_entrega_custodia, self.anexo_digital, self.anexo_digital, self.perito1, self.perito2
-    
+        return self.numero_laudo
 
-class Auditoria(models.Models):
-    dados_antigos = models.JSONField
+class Auditoria(models.Model):
+    tabela_afetada = models.CharField(max_length=255)
+    id_registro = models.IntegerField()
+    acao = models.CharField(max_length=10) # insert, update, delete
+    dados_antigos = models.JSONField(blank=True, null=True)
+    data_hora = models.DateTimeField(auto_now_add=True)
     
-    
-    
-
-    
-
-
-    
-    
+    def __str__(self):
+        return f"Auditoria em {self.tabela_afetada} - Ação: {self.acao}"
