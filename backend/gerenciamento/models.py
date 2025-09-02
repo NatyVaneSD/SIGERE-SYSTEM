@@ -127,6 +127,7 @@ class Protocolo(models.Model):
 class Equipamento(models.Model):
     # Chave estrangeira para o Tipo_Equipamento
     tipo_equipamento = models.ForeignKey('TipoEquipamento', on_delete=models.CASCADE)
+    quant_equipamente = models.PositiveSmallIntegerField()
     # Chave estrangeira para o Armazenamento
     local_armazenamento = models.ForeignKey('Armazenamento', on_delete=models.SET_NULL, null=True)
     
