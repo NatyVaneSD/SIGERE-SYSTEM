@@ -1,6 +1,5 @@
 /* frontend/src/index.css */
 
-/* Remove a estilização padrão do navegador */
 body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, input, select, button, textarea {
   margin: 0;
   padding: 0;

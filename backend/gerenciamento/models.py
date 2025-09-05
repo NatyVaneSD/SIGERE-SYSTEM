@@ -3,7 +3,7 @@
 from django.db import models
 
 # Listas de escolhas (choices) para os campos
-# Definidas como tuplas, não dicionários, e fora das classes para melhor reuso
+
 PERITO_CHOICES = [
     ("Marcelo", "Marcelo Maués"),
     ("Fernando", "Luiz Fernando"),
@@ -54,12 +54,9 @@ DEPOSITO_CHOICES = [
     ("D3", "Deposito 03"),
 ]
 
-# ----------------------------------------------------------------------------------------------------------------------
-
-# Classes corrigidas (modelos)
 
 class UnidadeSolicitante(models.Model):
-    # O Django já cria o campo 'id' automaticamente
+ 
     nome_UnidadeSolicitante = models.CharField(max_length=255)
 
     def __str__(self):
@@ -67,7 +64,7 @@ class UnidadeSolicitante(models.Model):
 
 class Solicitante(models.Model):
     nome_solicitante = models.CharField(max_length=255)
-    # Adicionando a chave estrangeira para UnidadeSolicitante
+    #chave estrangeira para UnidadeSolicitante
     unidade_solicitante = models.ForeignKey(UnidadeSolicitante, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -80,7 +77,7 @@ class TipoExame(models.Model):
         return self.nome_exame
 
 class Perito(models.Model):
-    # Criando um modelo de Perito para ter uma tabela própria
+    # modelo de Perito para ter uma tabela própria
     nome = models.CharField(max_length=255)
     # Relação com a tabela de Laudo e Protocolo será feita usando ForeingKey
     
@@ -88,21 +85,21 @@ class Perito(models.Model):
         return self.nome
     
 class Requisicao(models.Model):
-    # O id é gerado automaticamente
+
     tipo_documento = models.CharField(max_length=4, choices=TIPO_DOCUMENTO_CHOICES)
-    # numero_caso não precisa ser max_length=50, 9 é o suficiente
+    
     numero_caso = models.CharField(max_length=9, unique=True)
-    # Adicionando parênteses para os campos de data
+    
     data_requisicao = models.DateField()
     data_recebimento = models.DateField()
-    # TextField não precisa de max_length
+    
     objetivo_pericia = models.TextField()
     status_requisicao = models.CharField(max_length=20, choices=STATUS_CHOICES)
     peso_requisicao = models.CharField(max_length=2, choices=PESO_CHOICES)
-    # PAE não precisa ser unique, pois pode haver requisições sem PAE
+   
     pae_requisicao = models.CharField(max_length=25, blank=True, null=True)
 
-    # Adicionando as chaves estrangeiras para Solicitante e TipoExame
+   
     solicitante = models.ForeignKey(Solicitante, on_delete=models.SET_NULL, null=True)
     tipo_exame = models.ForeignKey(TipoExame, on_delete=models.SET_NULL, null=True)
     
@@ -114,7 +111,7 @@ class Protocolo(models.Model):
     numero_protocolo = models.CharField(max_length=50, unique=True)
     data_entrega_perito = models.DateField()  # Adicionando parênteses
     
-    # Perito deve ser uma chave estrangeira, não um campo de texto com escolhas
+    
     perito = models.ForeignKey(Perito, on_delete=models.SET_NULL, null=True)
     
     # Chave estrangeira para a Requisição
@@ -160,8 +157,7 @@ class Laudo(models.Model):
     data_entrega_expedicao = models.DateField()
     data_entrega_custodia = models.DateField()
     anexo_digital = models.BooleanField(default=True)
-    
-    # Laudo pode ter um ou mais peritos, então a melhor forma é usar ManyToManyField
+
     peritos = models.ManyToManyField(Perito)
     
     # Laudo se liga a um ou mais equipamentos
@@ -176,7 +172,7 @@ class Laudo(models.Model):
 class Auditoria(models.Model):
     tabela_afetada = models.CharField(max_length=255)
     id_registro = models.IntegerField()
-    acao = models.CharField(max_length=10) # insert, update, delete
+    acao = models.CharField(max_length=10) 
     dados_antigos = models.JSONField(blank=True, null=True)
     data_hora = models.DateTimeField(auto_now_add=True)
     
